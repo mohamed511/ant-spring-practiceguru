@@ -3,6 +3,7 @@ package com.ant.springpracticeguru.service;
 import com.ant.springpracticeguru.domain.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -75,6 +76,25 @@ public class CustomerServiceImpl implements CustomerService {
         current.setName(customer.getName());
         current.setVersion(customer.getVersion());
         current.setUpdateDate(LocalDateTime.now());
-        this.customers.put(current.getId(),current);
+        this.customers.put(current.getId(), current);
     }
+
+    @Override
+    public void delete(UUID customerId) {
+        this.customers.remove(customerId);
+    }
+
+    @Override
+    public void patchCustomer(UUID customerId, Customer customer) {
+        Customer current = findById(customerId);
+        if (StringUtils.hasText(customer.getName())) {
+            current.setName(customer.getName());
+        }
+        if (customer.getVersion() != null) {
+            current.setVersion(customer.getVersion());
+        }
+        this.customers.put(current.getId(), current);
+    }
+
+
 }
