@@ -2,6 +2,7 @@ package com.ant.springpracticeguru.service;
 
 import com.ant.springpracticeguru.domain.Customer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -96,5 +97,9 @@ public class CustomerServiceImpl implements CustomerService {
         this.customers.put(current.getId(), current);
     }
 
+    @Scheduled(fixedRate = 6000)
+    public void runEveryMinute() {
+        System.out.println("========> run every minute schedule");
+    }
 
 }
