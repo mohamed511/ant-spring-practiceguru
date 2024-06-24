@@ -25,7 +25,7 @@ public class CustomerController {
 
     //@Cacheable("customers")
     @RequestMapping(method = RequestMethod.GET)
-    public List<Customer> listBeers() {
+    public List<Customer> customerList() {
         return this.customerService.findAll();
     }
 
