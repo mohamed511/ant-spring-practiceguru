@@ -59,7 +59,7 @@ class CustomerControllerTest {
         //attribute name and the value
         map.put("name", "new name");
 
-        mockMvc.perform(patch("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH+"/" + customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(map))
@@ -73,7 +73,7 @@ class CustomerControllerTest {
     @Test
     void deleteTest() throws Exception {
         Customer customer = customerServiceImpl.findAll().get(0);
-        mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH+"/" + customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isNoContent());
         verify(customerService).delete(uuidArgumentCaptor.capture());
@@ -84,7 +84,7 @@ class CustomerControllerTest {
     void updateCustomerByIdTest() throws Exception {
         Customer customer = customerServiceImpl.findAll().get(0);
 
-        mockMvc.perform(put("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH+"/" + customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customer))
@@ -99,7 +99,7 @@ class CustomerControllerTest {
         customer.setId(null);
         customer.setVersion(null);
         given(customerService.add(any(Customer.class))).willReturn(customerServiceImpl.findAll().get(1));
-        mockMvc.perform(post("/api/v1/customer")
+        mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer))
@@ -111,7 +111,7 @@ class CustomerControllerTest {
     @Test
     void getCustomersList() throws Exception {
         given(customerService.findAll()).willReturn(customerServiceImpl.findAll());
-        mockMvc.perform(get("/api/v1/customer").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(3)));
@@ -123,7 +123,7 @@ class CustomerControllerTest {
 
         given(customerService.findById(any(UUID.class))).willReturn(customer);
 
-        mockMvc.perform(get("/api/v1/customer/" + customer.getId())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH+"/" + customer.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
