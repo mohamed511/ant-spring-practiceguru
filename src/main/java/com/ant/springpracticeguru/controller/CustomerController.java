@@ -67,21 +67,21 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<CustomerErrorResponse> handleException(CustomerNotFoundException ex) {
-        CustomerErrorResponse errorResponse = new CustomerErrorResponse();
-        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setTimeStamp(System.currentTimeMillis());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<CustomerErrorResponse> handleException(Exception ex) {
-        CustomerErrorResponse errorResponse = new CustomerErrorResponse();
-        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setTimeStamp(System.currentTimeMillis());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler
+//    public ResponseEntity<CustomerErrorResponse> handleException(CustomerNotFoundException ex) {
+//        CustomerErrorResponse errorResponse = new CustomerErrorResponse();
+//        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+//        errorResponse.setMessage(ex.getMessage());
+//        errorResponse.setTimeStamp(System.currentTimeMillis());
+//        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+//    }
+//
+//    @ExceptionHandler
+//    public ResponseEntity<CustomerErrorResponse> handleException(Exception ex) {
+//        CustomerErrorResponse errorResponse = new CustomerErrorResponse();
+//        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+//        errorResponse.setMessage(ex.getMessage());
+//        errorResponse.setTimeStamp(System.currentTimeMillis());
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 }
