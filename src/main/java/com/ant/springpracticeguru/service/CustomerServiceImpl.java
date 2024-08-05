@@ -1,6 +1,7 @@
 package com.ant.springpracticeguru.service;
 
 import com.ant.springpracticeguru.domain.Customer;
+import com.ant.springpracticeguru.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -51,11 +52,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findById(UUID id) {
-
+    public Optional<Customer> findById(UUID id) {
         log.debug("Get product by Id - in service. Id: " + id.toString());
-
-        return this.customers.get(id);
+        return Optional.of(this.customers.get(id));
     }
 
     @Override
@@ -73,11 +72,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void updateById(UUID customerId, Customer customer) {
-        Customer current = findById(customerId);
-        current.setName(customer.getName());
-        current.setVersion(customer.getVersion());
-        current.setUpdateDate(LocalDateTime.now());
-        this.customers.put(current.getId(), current);
+        Optional<Customer> current = findById(customerId);
+        if (current.isPresent()) {
+            Customer c = current.get();
+            c.setName(customer.getName());
+            c.setVersion(customer.getVersion());
+            c.setUpdateDate(LocalDateTime.now());
+            this.customers.put(c.getId(), c);
+        } else {
+            throw new CustomerNotFoundException("Customer not exist to make update");
+        }
     }
 
     @Override
@@ -87,7 +91,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void patchCustomer(UUID customerId, Customer customer) {
-        Customer current = findById(customerId);
+        Optional<Customer> c = findById(customerId);
+        if (c.isEmpty()) {
+            throw new CustomerNotFoundException("Customer not exist to make patch update");
+        }
+        Customer current = c.get();
         if (StringUtils.hasText(customer.getName())) {
             current.setName(customer.getName());
         }

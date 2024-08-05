@@ -33,11 +33,8 @@ public class CustomerController {
 
     @GetMapping(CUSTOMER_PATH_ID)
     public Customer getCustomerById(@PathVariable("customerId") UUID customerId) {
-        log.debug("Get Product by Id - in controller");
-        if (this.customerService.findById(customerId) == null) {
-            throw new CustomerNotFoundException("Customer With id: " + customerId + " Not Found");
-        }
-        return this.customerService.findById(customerId);
+        log.debug("Get Customer by Id - in controller");
+        return this.customerService.findById(customerId).orElseThrow(NotFoundCustomException::new);
     }
 
     //@CacheEvict(value = "customers", allEntries = true)
