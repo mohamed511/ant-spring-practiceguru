@@ -50,6 +50,15 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getCustomerByIdNotFound() throws Exception {
+        given(customerService.findById(any(UUID.class))).willThrow(NotFoundCustomException.class);
+
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void patchCustomerTest() throws Exception {
         Customer customer = customerServiceImpl.findAll().get(0);
 
