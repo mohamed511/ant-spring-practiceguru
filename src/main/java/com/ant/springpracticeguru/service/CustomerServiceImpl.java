@@ -1,6 +1,7 @@
 package com.ant.springpracticeguru.service;
 
-import com.ant.springpracticeguru.domain.Customer;
+import com.ant.springpracticeguru.controller.NotFoundCustomException;
+import com.ant.springpracticeguru.domain.CustomerDTO;
 import com.ant.springpracticeguru.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,10 +14,10 @@ import java.util.*;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private Map<UUID, Customer> customers;
+    private Map<UUID, CustomerDTO> customers;
 
     public CustomerServiceImpl() {
-        Customer customer1 = Customer.builder()
+        CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name("Customer 1")
                 .version(1)
@@ -24,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Customer customer2 = Customer.builder()
+        CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name("Customer 2")
                 .version(1)
@@ -32,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Customer customer3 = Customer.builder()
+        CustomerDTO customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name("Customer 3")
                 .version(1)
@@ -47,19 +48,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAll() {
+    public List<CustomerDTO> findAll() {
         return new ArrayList<>(this.customers.values());
     }
 
     @Override
-    public Optional<Customer> findById(UUID id) {
-        log.debug("Get product by Id - in service. Id: " + id.toString());
+    public Optional<CustomerDTO> findById(UUID id) {
+        log.debug("Get product by Id - in service. Id: {}", id.toString());
         return Optional.of(this.customers.get(id));
     }
 
     @Override
-    public Customer add(Customer customer) {
-        Customer savedCustomer = Customer.builder()
+    public CustomerDTO add(CustomerDTO customer) {
+        CustomerDTO savedCustomer = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name(customer.getName())
                 .version(customer.getVersion())
@@ -71,16 +72,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateById(UUID customerId, Customer customer) {
-        Optional<Customer> current = findById(customerId);
+    public void updateById(UUID customerId, CustomerDTO customer) {
+        Optional<CustomerDTO> current = findById(customerId);
         if (current.isPresent()) {
-            Customer c = current.get();
+            CustomerDTO c = current.get();
             c.setName(customer.getName());
             c.setVersion(customer.getVersion());
             c.setUpdateDate(LocalDateTime.now());
             this.customers.put(c.getId(), c);
         } else {
-            throw new CustomerNotFoundException("Customer not exist to make update");
+            throw new NotFoundCustomException("Item not exist to make update");
         }
     }
 
@@ -90,12 +91,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void patchCustomer(UUID customerId, Customer customer) {
-        Optional<Customer> c = findById(customerId);
+    public void patchCustomer(UUID customerId, CustomerDTO customer) {
+        Optional<CustomerDTO> c = findById(customerId);
         if (c.isEmpty()) {
             throw new CustomerNotFoundException("Customer not exist to make patch update");
         }
-        Customer current = c.get();
+        CustomerDTO current = c.get();
         if (StringUtils.hasText(customer.getName())) {
             current.setName(customer.getName());
         }

@@ -1,8 +1,11 @@
 package com.ant.springpracticeguru.service;
 
-import com.ant.springpracticeguru.domain.Product;
+import com.ant.springpracticeguru.controller.NotFoundCustomException;
+import com.ant.springpracticeguru.domain.ProductDTO;
+import com.ant.springpracticeguru.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,12 +14,12 @@ import java.util.*;
 @Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
-    private Map<UUID, Product> products;
+    private Map<UUID, ProductDTO> products;
 
     public ProductServiceImpl() {
         this.products = new HashMap<>();
 
-        Product Product1 = Product.builder()
+        ProductDTO Product1 = ProductDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Galaxy Cat")
@@ -28,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Product Product2 = Product.builder()
+        ProductDTO Product2 = ProductDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Crank")
@@ -40,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        Product Product3 = Product.builder()
+        ProductDTO Product3 = ProductDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Sunshine City")
@@ -58,15 +61,78 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll(){
+    public List<ProductDTO> findAll() {
         return new ArrayList<>(this.products.values());
     }
 
     @Override
-    public Product getProductById(UUID id) {
-
+    public Optional<ProductDTO> findById(UUID id) {
         log.debug("Get product by Id - in service. Id: " + id.toString());
-
-        return this.products.get(id);
+        return Optional.of(this.products.get(id));
     }
+
+    @Override
+    public ProductDTO add(ProductDTO productDTO) {
+        ProductDTO saveProduct = ProductDTO.builder()
+                .id(productDTO.getId())
+                .version(productDTO.getVersion())
+                .productName(productDTO.getProductName())
+                .productColor(productDTO.getProductColor())
+                .upc(productDTO.getUpc())
+                .quantityOnHand(productDTO.getQuantityOnHand())
+                .price(productDTO.getPrice())
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .build();
+        this.products.put(saveProduct.getId(), saveProduct);
+        return saveProduct;
+    }
+
+    @Override
+    public void updateById(UUID productId, ProductDTO productDTO) {
+        Optional<ProductDTO> current = findById(productId);
+        if (current.isPresent()) {
+            ProductDTO p = current.get();
+            p.setProductName(productDTO.getProductName());
+            p.setProductColor(productDTO.getProductColor());
+            p.setUpc(productDTO.getUpc());
+            p.setQuantityOnHand(productDTO.getQuantityOnHand());
+            p.setPrice(productDTO.getPrice());
+        } else {
+            throw new NotFoundCustomException("Item not exist to make update");
+        }
+    }
+
+    @Override
+    public void delete(UUID productId) {
+        this.products.remove(productId);
+    }
+
+    @Override
+    public void patchProduct(UUID productId, ProductDTO productDTO) {
+        ProductDTO existing = products.get(productId);
+
+        if (StringUtils.hasText(productDTO.getProductName())) {
+            existing.setProductName(productDTO.getProductName());
+        }
+
+        if (productDTO.getProductColor() != null) {
+            existing.setProductColor(productDTO.getProductColor());
+        }
+
+        if (productDTO.getPrice() != null) {
+            existing.setPrice(productDTO.getPrice());
+        }
+
+        if (productDTO.getQuantityOnHand() != null) {
+            existing.setQuantityOnHand(productDTO.getQuantityOnHand());
+        }
+
+        if (StringUtils.hasText(productDTO.getUpc())) {
+            existing.setUpc(productDTO.getUpc());
+        }
+        this.products.put(existing.getId(), existing);
+    }
+
+
 }

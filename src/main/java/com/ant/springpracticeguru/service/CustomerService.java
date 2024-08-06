@@ -1,21 +1,21 @@
 package com.ant.springpracticeguru.service;
 
-import com.ant.springpracticeguru.domain.Customer;
+import com.ant.springpracticeguru.domain.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<Customer> findAll();
+    List<CustomerDTO> findAll();
 
-    Optional<Customer> findById(UUID id);
+    Optional<CustomerDTO> findById(UUID id);
 
-    Customer add(Customer customer);
+    CustomerDTO add(CustomerDTO customer);
 
-    void updateById(UUID customerId, Customer customer);
+    void updateById(UUID customerId, CustomerDTO customer);
 
     void delete(UUID customerId);
 
-    void patchCustomer(UUID customerId, Customer customer);
+    void patchCustomer(UUID customerId, CustomerDTO customer);
 }

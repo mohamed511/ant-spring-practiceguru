@@ -1,12 +1,21 @@
 package com.ant.springpracticeguru.service;
 
-import com.ant.springpracticeguru.domain.Product;
+import com.ant.springpracticeguru.domain.ProductDTO;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductService {
-    List<Product> findAll();
+    List<ProductDTO> findAll();
 
-    Product getProductById(UUID id);
+    Optional<ProductDTO> findById(UUID id);
+
+    ProductDTO add(ProductDTO productDTO);
+
+    void updateById(UUID productId, ProductDTO productDTO);
+
+    void delete(UUID productId);
+
+    void patchProduct(UUID productId, ProductDTO productDTO);
 }

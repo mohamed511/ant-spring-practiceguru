@@ -1,13 +1,9 @@
 package com.ant.springpracticeguru.controller;
 
-import com.ant.springpracticeguru.domain.Customer;
-import com.ant.springpracticeguru.exception.CustomerErrorResponse;
-import com.ant.springpracticeguru.exception.CustomerNotFoundException;
+import com.ant.springpracticeguru.domain.CustomerDTO;
 import com.ant.springpracticeguru.service.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,20 +23,20 @@ public class CustomerController {
 
     //@Cacheable("customers")
     @GetMapping(CUSTOMER_PATH)
-    public List<Customer> customerList() {
+    public List<CustomerDTO> customerList() {
         return this.customerService.findAll();
     }
 
     @GetMapping(CUSTOMER_PATH_ID)
-    public Customer getCustomerById(@PathVariable("customerId") UUID customerId) {
+    public CustomerDTO getCustomerById(@PathVariable("customerId") UUID customerId) {
         log.debug("Get Customer by Id - in controller");
         return this.customerService.findById(customerId).orElseThrow(NotFoundCustomException::new);
     }
 
     //@CacheEvict(value = "customers", allEntries = true)
     @PostMapping(CUSTOMER_PATH)
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
-        Customer savedCustomer = this.customerService.add(customer);
+    public ResponseEntity<?> addCustomer(@RequestBody CustomerDTO customer) {
+        CustomerDTO savedCustomer = this.customerService.add(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("location", "/api/v1/customer/" + savedCustomer.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
@@ -48,7 +44,7 @@ public class CustomerController {
 
     @PutMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<?> updateCustomerById(@PathVariable("customerId") UUID customerId,
-                                                @RequestBody Customer customer) {
+                                                @RequestBody CustomerDTO customer) {
         this.customerService.updateById(customerId, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -61,7 +57,7 @@ public class CustomerController {
 
     @PatchMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<?> patchCustomer(@PathVariable("customerId") UUID customerId,
-                                           @RequestBody Customer customer) {
+                                           @RequestBody CustomerDTO customer) {
         this.customerService.patchCustomer(customerId, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
