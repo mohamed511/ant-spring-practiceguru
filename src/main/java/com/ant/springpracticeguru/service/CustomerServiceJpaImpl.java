@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Primary
@@ -21,12 +22,16 @@ public class CustomerServiceJpaImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> findAll() {
-        return this.customerMapper.customerToCustomerDto(this.customerRepository.findAll());
+        return this.customerRepository.findAll()
+                .stream()
+                .map(customerMapper::customerToCustomerDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CustomerDTO> findById(UUID id) {
-        return Optional.of(this.customerMapper.customerToCustomerDto(this.customerRepository.findById(id).get()));
+        return Optional.ofNullable(this.customerMapper.customerToCustomerDto(this.customerRepository.findById(id)
+                 .orElse(null)));
     }
 
     @Override
