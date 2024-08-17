@@ -6,6 +6,7 @@ import com.ant.springpracticeguru.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,14 +41,14 @@ public class ProductServiceJpaImpl implements ProductService {
     public Optional<ProductDTO> updateById(UUID productId, ProductDTO productDTO) {
         AtomicReference<Optional<ProductDTO>> atomicReference = new AtomicReference<>();
 
-        this.productRepository.findById(productId).ifPresentOrElse(foundBeer -> {
-            foundBeer.setProductName(productDTO.getProductName());
-            foundBeer.setProductColor(productDTO.getProductColor());
-            foundBeer.setUpc(productDTO.getUpc());
-            foundBeer.setPrice(productDTO.getPrice());
-            foundBeer.setQuantityOnHand(productDTO.getQuantityOnHand());
-            productRepository.save(foundBeer);
-            atomicReference.set(Optional.of(productMapper.productToProductDto(productRepository.save(foundBeer))));
+        this.productRepository.findById(productId).ifPresentOrElse(foundProduct -> {
+            foundProduct.setProductName(productDTO.getProductName());
+            foundProduct.setProductColor(productDTO.getProductColor());
+            foundProduct.setUpc(productDTO.getUpc());
+            foundProduct.setPrice(productDTO.getPrice());
+            foundProduct.setQuantityOnHand(productDTO.getQuantityOnHand());
+            productRepository.save(foundProduct);
+            atomicReference.set(Optional.of(productMapper.productToProductDto(productRepository.save(foundProduct))));
         }, () -> atomicReference.set(Optional.empty()));
 
         return atomicReference.get();
@@ -64,7 +65,35 @@ public class ProductServiceJpaImpl implements ProductService {
     }
 
     @Override
-    public void patchProduct(UUID productId, ProductDTO productDTO) {
+    public Optional<ProductDTO> patchProduct(UUID productId, ProductDTO productDTO) {
+        AtomicReference<Optional<ProductDTO>> atomicReference = new AtomicReference<>();
+
+        this.productRepository.findById(productId).ifPresentOrElse(foundProduct -> {
+            if (StringUtils.hasText(productDTO.getProductName())) {
+                foundProduct.setProductName(productDTO.getProductName());
+            }
+
+            if (productDTO.getProductColor() != null) {
+                foundProduct.setProductColor(productDTO.getProductColor());
+            }
+
+            if (productDTO.getPrice() != null) {
+                foundProduct.setPrice(productDTO.getPrice());
+            }
+
+            if (productDTO.getQuantityOnHand() != null) {
+                foundProduct.setQuantityOnHand(productDTO.getQuantityOnHand());
+            }
+
+            if (StringUtils.hasText(productDTO.getUpc())) {
+                foundProduct.setUpc(productDTO.getUpc());
+            }
+
+            productRepository.save(foundProduct);
+            atomicReference.set(Optional.of(productMapper.productToProductDto(productRepository.save(foundProduct))));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
 
     }
 }

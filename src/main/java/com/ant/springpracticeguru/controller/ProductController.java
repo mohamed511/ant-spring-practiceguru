@@ -50,7 +50,7 @@ public class ProductController {
 
     @DeleteMapping(PRODUCT_PATH_ID)
     public ResponseEntity<?> deleteById(@PathVariable("productId") UUID productId) {
-        if (!productService.delete(productId)) {
+        if (Boolean.FALSE.equals(productService.delete(productId))) {
             throw new NotFoundCustomException("can not delete the item as is not found");
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -58,7 +58,9 @@ public class ProductController {
 
     @PatchMapping(PRODUCT_PATH_ID)
     public ResponseEntity<?> updateProductPatchById(@PathVariable("productId") UUID productId, @RequestBody ProductDTO productDTO) {
-        productService.patchProduct(productId, productDTO);
+        if (productService.patchProduct(productId, productDTO).isEmpty()) {
+            throw new NotFoundCustomException("can not patch. the item not exist");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

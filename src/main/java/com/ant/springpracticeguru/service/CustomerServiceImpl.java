@@ -72,7 +72,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateById(UUID customerId, CustomerDTO customer) {
+    public Optional<CustomerDTO> updateById(UUID customerId, CustomerDTO customer) {
         Optional<CustomerDTO> current = findById(customerId);
         if (current.isPresent()) {
             CustomerDTO c = current.get();
@@ -80,18 +80,20 @@ public class CustomerServiceImpl implements CustomerService {
             c.setVersion(customer.getVersion());
             c.setUpdateDate(LocalDateTime.now());
             this.customers.put(c.getId(), c);
+            return Optional.of(this.customers.get(c.getId()));
         } else {
             throw new NotFoundCustomException("Item not exist to make update");
         }
     }
 
     @Override
-    public void delete(UUID customerId) {
+    public Boolean delete(UUID customerId) {
         this.customers.remove(customerId);
+        return true;
     }
 
     @Override
-    public void patchCustomer(UUID customerId, CustomerDTO customer) {
+    public Optional<CustomerDTO> patchCustomer(UUID customerId, CustomerDTO customer) {
         Optional<CustomerDTO> c = findById(customerId);
         if (c.isEmpty()) {
             throw new CustomerNotFoundException("Customer not exist to make patch update");
@@ -104,6 +106,7 @@ public class CustomerServiceImpl implements CustomerService {
             current.setVersion(customer.getVersion());
         }
         this.customers.put(current.getId(), current);
+        return Optional.ofNullable(this.customers.get(current.getId()));
     }
 
     @Scheduled(fixedRate = 6000)

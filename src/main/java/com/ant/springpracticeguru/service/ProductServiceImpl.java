@@ -110,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void patchProduct(UUID productId, ProductDTO productDTO) {
+    public Optional<ProductDTO> patchProduct(UUID productId, ProductDTO productDTO) {
         ProductDTO existing = products.get(productId);
 
         if (StringUtils.hasText(productDTO.getProductName())) {
@@ -133,6 +133,7 @@ public class ProductServiceImpl implements ProductService {
             existing.setUpc(productDTO.getUpc());
         }
         this.products.put(existing.getId(), existing);
+        return Optional.ofNullable(this.products.get(existing.getId()));
     }
 
 

@@ -58,6 +58,7 @@ class ProductControllerTest {
         Map<String, Object> productMap = new HashMap<>();
         productMap.put("productName", "New Name");
 
+        given(productService.patchProduct(any(),any())).willReturn(Optional.of(productDTO));
         mockMvc.perform(patch(ProductController.PRODUCT_PATH_ID, productDTO.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

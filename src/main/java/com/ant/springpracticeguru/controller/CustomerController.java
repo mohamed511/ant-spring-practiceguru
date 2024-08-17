@@ -45,20 +45,26 @@ public class CustomerController {
     @PutMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<?> updateCustomerById(@PathVariable("customerId") UUID customerId,
                                                 @RequestBody CustomerDTO customer) {
-        this.customerService.updateById(customerId, customer);
+        if (this.customerService.updateById(customerId, customer).isEmpty()) {
+            throw new NotFoundCustomException("can not update this customer");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<?> delete(@PathVariable("customerId") UUID customerId) {
-        this.customerService.delete(customerId);
+        if (Boolean.FALSE.equals(this.customerService.delete(customerId))) {
+            throw new NotFoundCustomException("can not delete this customer");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(CUSTOMER_PATH_ID)
     public ResponseEntity<?> patchCustomer(@PathVariable("customerId") UUID customerId,
                                            @RequestBody CustomerDTO customer) {
-        this.customerService.patchCustomer(customerId, customer);
+        if (this.customerService.patchCustomer(customerId, customer).isEmpty()) {
+            throw new NotFoundCustomException("can not patch this customer");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

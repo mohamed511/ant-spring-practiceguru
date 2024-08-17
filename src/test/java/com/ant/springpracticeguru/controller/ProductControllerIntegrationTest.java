@@ -34,6 +34,29 @@ class ProductControllerIntegrationTest {
     ProductMapper productMapper;
 
     @Test
+    void testPatchNotFoundProduct() {
+        assertThrows(NotFoundCustomException.class, () -> {
+            this.productController.updateProductPatchById(UUID.randomUUID(), ProductDTO.builder().build());
+        });
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testPatchExistingProduct() {
+        final String updateName = "update";
+        Product product = this.productRepository.findAll().get(0);
+        ProductDTO productDto = this.productMapper.productToProductDto(product);
+        productDto.setId(null);
+        productDto.setVersion(null);
+        productDto.setProductName(updateName);
+        ResponseEntity<?> responseEntity = this.productController.updateProductPatchById(product.getId(), productDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        Product findProduct = productRepository.findById(product.getId()).get();
+        assertThat(findProduct.getProductName()).isEqualTo(updateName);
+    }
+
+    @Test
     void testDeleteByIdNotFound() {
         assertThrows(NotFoundCustomException.class, () -> {
             this.productController.deleteById(UUID.randomUUID());

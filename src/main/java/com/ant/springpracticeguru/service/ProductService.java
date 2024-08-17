@@ -17,5 +17,5 @@ public interface ProductService {
 
     Boolean delete(UUID productId);
 
-    void patchProduct(UUID productId, ProductDTO productDTO);
+    Optional<ProductDTO> patchProduct(UUID productId, ProductDTO productDTO);
 }
