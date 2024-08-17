@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,13 +34,31 @@ class ProductControllerIntegrationTest {
     ProductMapper productMapper;
 
     @Test
+    void testDeleteByIdNotFound() {
+        assertThrows(NotFoundCustomException.class, () -> {
+            this.productController.deleteById(UUID.randomUUID());
+        });
+
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testDeleteById() {
+        Product product = this.productRepository.findAll().get(0);
+        ResponseEntity<?> responseEntity = this.productController.deleteById(product.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(this.productRepository.findById(product.getId())).isEmpty();
+    }
+
+    @Test
     void updateNotFoundProduct() {
         assertThrows(NotFoundCustomException.class, () -> {
             this.productController.updateById(UUID.randomUUID(), ProductDTO.builder().build());
         });
     }
 
-    //@Rollback
+    @Rollback
     @Transactional
     @Test
     void updateExistingProduct() {

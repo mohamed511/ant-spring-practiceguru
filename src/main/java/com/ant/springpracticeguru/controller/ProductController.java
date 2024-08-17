@@ -37,7 +37,7 @@ public class ProductController {
         ProductDTO savedProduct = productService.add(productDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", PRODUCT_PATH + "/" + savedProduct.getId().toString());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping(PRODUCT_PATH_ID)
@@ -49,14 +49,16 @@ public class ProductController {
     }
 
     @DeleteMapping(PRODUCT_PATH_ID)
-    public ResponseEntity deleteById(@PathVariable("productId") UUID productId) {
-        productService.delete(productId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteById(@PathVariable("productId") UUID productId) {
+        if (!productService.delete(productId)) {
+            throw new NotFoundCustomException("can not delete the item as is not found");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(PRODUCT_PATH_ID)
-    public ResponseEntity updateProductPatchById(@PathVariable("productId") UUID productId, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<?> updateProductPatchById(@PathVariable("productId") UUID productId, @RequestBody ProductDTO productDTO) {
         productService.patchProduct(productId, productDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

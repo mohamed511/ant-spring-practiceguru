@@ -15,7 +15,7 @@ public interface ProductService {
 
     Optional<ProductDTO> updateById(UUID productId, ProductDTO productDTO);
 
-    void delete(UUID productId);
+    Boolean delete(UUID productId);
 
     void patchProduct(UUID productId, ProductDTO productDTO);
 }

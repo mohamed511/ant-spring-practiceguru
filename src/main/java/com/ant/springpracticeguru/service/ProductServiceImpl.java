@@ -104,8 +104,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(UUID productId) {
+    public Boolean delete(UUID productId) {
         this.products.remove(productId);
+        return true;
     }
 
     @Override

@@ -54,7 +54,12 @@ public class ProductServiceJpaImpl implements ProductService {
     }
 
     @Override
-    public void delete(UUID productId) {
+    public Boolean delete(UUID productId) {
+        if (this.productRepository.existsById(productId)) {
+            this.productRepository.deleteById(productId);
+            return true;
+        }
+        return false;
 
     }
 
