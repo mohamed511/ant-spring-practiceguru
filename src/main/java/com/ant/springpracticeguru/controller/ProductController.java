@@ -41,9 +41,11 @@ public class ProductController {
     }
 
     @PutMapping(PRODUCT_PATH_ID)
-    public ResponseEntity updateById(@PathVariable("productId") UUID productId, @RequestBody ProductDTO productDTO) {
-        productService.updateById(productId, productDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> updateById(@PathVariable("productId") UUID productId, @RequestBody ProductDTO productDTO) {
+        if (productService.updateById(productId, productDTO).isEmpty()) {
+            throw new NotFoundCustomException("can not update. the item not exist");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(PRODUCT_PATH_ID)

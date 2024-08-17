@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Primary
@@ -22,9 +23,7 @@ public class ProductServiceJpaImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        return this.productRepository.findAll().stream()
-                .map(productMapper::productToProductDto)
-                .collect(Collectors.toList());
+        return this.productRepository.findAll().stream().map(productMapper::productToProductDto).collect(Collectors.toList());
     }
 
     @Override
@@ -34,12 +33,24 @@ public class ProductServiceJpaImpl implements ProductService {
 
     @Override
     public ProductDTO add(ProductDTO productDTO) {
-        return null;
+        return productMapper.productToProductDto(productRepository.save(productMapper.productDtoToProduct(productDTO)));
     }
 
     @Override
-    public void updateById(UUID productId, ProductDTO productDTO) {
+    public Optional<ProductDTO> updateById(UUID productId, ProductDTO productDTO) {
+        AtomicReference<Optional<ProductDTO>> atomicReference = new AtomicReference<>();
 
+        this.productRepository.findById(productId).ifPresentOrElse(foundBeer -> {
+            foundBeer.setProductName(productDTO.getProductName());
+            foundBeer.setProductColor(productDTO.getProductColor());
+            foundBeer.setUpc(productDTO.getUpc());
+            foundBeer.setPrice(productDTO.getPrice());
+            foundBeer.setQuantityOnHand(productDTO.getQuantityOnHand());
+            productRepository.save(foundBeer);
+            atomicReference.set(Optional.of(productMapper.productToProductDto(productRepository.save(foundBeer))));
+        }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
     }
 
     @Override

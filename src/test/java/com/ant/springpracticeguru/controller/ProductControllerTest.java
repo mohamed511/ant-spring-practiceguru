@@ -86,6 +86,7 @@ class ProductControllerTest {
     @Test
     void testUpdateProduct() throws Exception {
         ProductDTO productDTO = productServiceImpl.findAll().get(0);
+        given(productService.updateById(any(),any())).willReturn(Optional.of(productDTO));
 
         mockMvc.perform(put(ProductController.PRODUCT_PATH_ID, productDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)

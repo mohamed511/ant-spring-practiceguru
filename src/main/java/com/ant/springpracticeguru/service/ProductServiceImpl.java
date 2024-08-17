@@ -2,7 +2,6 @@ package com.ant.springpracticeguru.service;
 
 import com.ant.springpracticeguru.controller.NotFoundCustomException;
 import com.ant.springpracticeguru.domain.ProductDTO;
-import com.ant.springpracticeguru.exception.CustomerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -89,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateById(UUID productId, ProductDTO productDTO) {
+    public Optional<ProductDTO> updateById(UUID productId, ProductDTO productDTO) {
         Optional<ProductDTO> current = findById(productId);
         if (current.isPresent()) {
             ProductDTO p = current.get();
@@ -98,6 +97,7 @@ public class ProductServiceImpl implements ProductService {
             p.setUpc(productDTO.getUpc());
             p.setQuantityOnHand(productDTO.getQuantityOnHand());
             p.setPrice(productDTO.getPrice());
+            return Optional.of(p);
         } else {
             throw new NotFoundCustomException("Item not exist to make update");
         }
