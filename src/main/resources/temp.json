@@ -1,0 +1,52 @@
+[
+  {
+    "codes": [
+      "NotNull.productDTO.productName",
+      "NotNull.productName",
+      "NotNull.java.lang.String",
+      "NotNull"
+    ],
+    "arguments": [
+      {
+        "codes": [
+          "productDTO.productName",
+          "productName"
+        ],
+        "arguments": null,
+        "defaultMessage": "productName",
+        "code": "productName"
+      }
+    ],
+    "defaultMessage": "must not be null",
+    "objectName": "productDTO",
+    "field": "productName",
+    "rejectedValue": null,
+    "bindingFailure": false,
+    "code": "NotNull"
+  },
+  {
+    "codes": [
+      "NotBlank.productDTO.productName",
+      "NotBlank.productName",
+      "NotBlank.java.lang.String",
+      "NotBlank"
+    ],
+    "arguments": [
+      {
+        "codes": [
+          "productDTO.productName",
+          "productName"
+        ],
+        "arguments": null,
+        "defaultMessage": "productName",
+        "code": "productName"
+      }
+    ],
+    "defaultMessage": "must not be blank",
+    "objectName": "productDTO",
+    "field": "productName",
+    "rejectedValue": null,
+    "bindingFailure": false,
+    "code": "NotBlank"
+  }
+]

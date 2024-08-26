@@ -13,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,5 +148,21 @@ class ProductControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(testProduct.getId().toString())))
                 .andExpect(jsonPath("$.productName", is(testProduct.getProductName())));
+    }
+
+    @Test
+    void testCreateNewProductNullProductName() throws Exception {
+        ProductDTO productDTO = ProductDTO.builder().build();
+
+        given(productService.add(any(ProductDTO.class))).willReturn(productServiceImpl.findAll().get(1));
+
+        MvcResult mvcResult =
+        mockMvc.perform(post(ProductController.PRODUCT_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productDTO)))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        System.out.println(mvcResult.getResponse().getContentAsString());
     }
 }

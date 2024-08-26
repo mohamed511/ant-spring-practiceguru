@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @PostMapping(PRODUCT_PATH)
-    public ResponseEntity handlePost(@RequestBody ProductDTO productDTO) {
+    public ResponseEntity handlePost(@Validated @RequestBody ProductDTO productDTO) {
         ProductDTO savedProduct = productService.add(productDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", PRODUCT_PATH + "/" + savedProduct.getId().toString());

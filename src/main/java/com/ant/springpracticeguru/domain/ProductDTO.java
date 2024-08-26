@@ -1,5 +1,7 @@
 package com.ant.springpracticeguru.domain;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class ProductDTO {
     private UUID id;
     private Integer version;
+    @NotBlank
+    @NotNull
     private String productName;
     private String productColor;
     private String upc;
