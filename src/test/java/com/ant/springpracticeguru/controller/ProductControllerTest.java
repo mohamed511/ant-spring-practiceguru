@@ -162,8 +162,23 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()",is(2)))
+                .andExpect(jsonPath("$.length()",is(6)))
                 .andReturn();
         System.out.println(mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testUpdateProductNullProductName() throws Exception {
+        ProductDTO productDTO = productServiceImpl.findAll().get(0);
+        productDTO.setProductName("");
+        given(productService.updateById(any(), any())).willReturn(Optional.of(productDTO));
+
+        mockMvc.perform(put(ProductController.PRODUCT_PATH_ID, productDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()",is(1)))
+                .andReturn();
     }
 }

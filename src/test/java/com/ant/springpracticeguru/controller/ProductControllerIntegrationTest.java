@@ -1,6 +1,7 @@
 package com.ant.springpracticeguru.controller;
 
 import com.ant.springpracticeguru.domain.ProductDTO;
+import com.ant.springpracticeguru.domain.ProductStyle;
 import com.ant.springpracticeguru.entities.Product;
 import com.ant.springpracticeguru.mapper.ProductMapper;
 import com.ant.springpracticeguru.repository.ProductRepository;
@@ -102,7 +103,7 @@ class ProductControllerIntegrationTest {
     @Test
     void saveNewProduct() {
         ProductDTO productDto = ProductDTO.builder()
-                .productName("Crank").productColor("green").upc("12356222")
+                .productName("Crank").productStyle(ProductStyle.GOSE).upc("12356222")
                 .price(new BigDecimal("11.99")).quantityOnHand(392)
                 .createdDate(LocalDateTime.now()).updateDate(LocalDateTime.now())
                 .build();

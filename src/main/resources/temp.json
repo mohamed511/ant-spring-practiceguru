@@ -1,8 +1,20 @@
 [
   {
+    "price": "must not be null"
+  },
+  {
+    "upc": "must not be blank"
+  },
+  {
     "productName": "must not be null"
   },
   {
     "productName": "must not be blank"
+  },
+  {
+    "productStyle": "must not be null"
+  },
+  {
+    "upc": "must not be null"
   }
 ]
