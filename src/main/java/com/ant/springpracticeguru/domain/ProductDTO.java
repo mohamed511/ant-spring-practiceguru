@@ -17,9 +17,13 @@ public class ProductDTO {
     @NotBlank
     @NotNull
     private String productName;
-    private String productColor;
+    @NotNull
+    private ProductStyle productStyle;
+    @NotBlank
+    @NotNull
     private String upc;
     private Integer quantityOnHand;
+    @NotNull
     private BigDecimal price;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;

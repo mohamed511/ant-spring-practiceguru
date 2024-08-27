@@ -1,5 +1,6 @@
 package com.ant.springpracticeguru.entities;
 
+import com.ant.springpracticeguru.domain.ProductStyle;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -24,7 +25,7 @@ public class Product {
     @Version
     private Integer version;
     private String productName;
-    private String productColor;
+    private ProductStyle productStyle;
     private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;

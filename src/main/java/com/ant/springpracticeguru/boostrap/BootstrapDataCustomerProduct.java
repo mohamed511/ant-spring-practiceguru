@@ -1,5 +1,6 @@
 package com.ant.springpracticeguru.boostrap;
 
+import com.ant.springpracticeguru.domain.ProductStyle;
 import com.ant.springpracticeguru.entities.Customer;
 import com.ant.springpracticeguru.entities.Product;
 import com.ant.springpracticeguru.repository.CustomerRepository;
@@ -28,7 +29,7 @@ public class BootstrapDataCustomerProduct implements CommandLineRunner {
         if (productRepository.count() == 0) {
             Product product1 = Product.builder()
                     .productName("Galaxy Cat")
-                    .productColor("white")
+                    .productStyle(ProductStyle.ALE)
                     .upc("12356")
                     .price(new BigDecimal("12.99"))
                     .quantityOnHand(122)
@@ -38,7 +39,7 @@ public class BootstrapDataCustomerProduct implements CommandLineRunner {
 
             Product product2 = Product.builder()
                     .productName("Crank")
-                    .productColor("green")
+                    .productStyle(ProductStyle.GOSE)
                     .upc("12356222")
                     .price(new BigDecimal("11.99"))
                     .quantityOnHand(392)
@@ -48,7 +49,7 @@ public class BootstrapDataCustomerProduct implements CommandLineRunner {
 
             Product product3 = Product.builder()
                     .productName("Sunshine City")
-                    .productColor("red")
+                    .productStyle(ProductStyle.LAGER)
                     .upc("12356")
                     .price(new BigDecimal("13.99"))
                     .quantityOnHand(144)

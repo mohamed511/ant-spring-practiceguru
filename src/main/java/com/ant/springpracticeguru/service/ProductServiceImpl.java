@@ -2,6 +2,7 @@ package com.ant.springpracticeguru.service;
 
 import com.ant.springpracticeguru.controller.NotFoundCustomException;
 import com.ant.springpracticeguru.domain.ProductDTO;
+import com.ant.springpracticeguru.domain.ProductStyle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Galaxy Cat")
-                .productColor("white")
+                .productStyle(ProductStyle.LAGER)
                 .upc("12356")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Crank")
-                .productColor("green")
+                .productStyle(ProductStyle.PILSNER)
                 .upc("12356222")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
@@ -46,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
                 .id(UUID.randomUUID())
                 .version(1)
                 .productName("Sunshine City")
-                .productColor("red")
+                .productStyle(ProductStyle.PORTER)
                 .upc("12356")
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
@@ -76,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
                 .id(productDTO.getId())
                 .version(productDTO.getVersion())
                 .productName(productDTO.getProductName())
-                .productColor(productDTO.getProductColor())
+                .productStyle(productDTO.getProductStyle())
                 .upc(productDTO.getUpc())
                 .quantityOnHand(productDTO.getQuantityOnHand())
                 .price(productDTO.getPrice())
@@ -93,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
         if (current.isPresent()) {
             ProductDTO p = current.get();
             p.setProductName(productDTO.getProductName());
-            p.setProductColor(productDTO.getProductColor());
+            p.setProductStyle(productDTO.getProductStyle());
             p.setUpc(productDTO.getUpc());
             p.setQuantityOnHand(productDTO.getQuantityOnHand());
             p.setPrice(productDTO.getPrice());
@@ -117,8 +118,8 @@ public class ProductServiceImpl implements ProductService {
             existing.setProductName(productDTO.getProductName());
         }
 
-        if (productDTO.getProductColor() != null) {
-            existing.setProductColor(productDTO.getProductColor());
+        if (productDTO.getProductStyle() != null) {
+            existing.setProductStyle(productDTO.getProductStyle());
         }
 
         if (productDTO.getPrice() != null) {

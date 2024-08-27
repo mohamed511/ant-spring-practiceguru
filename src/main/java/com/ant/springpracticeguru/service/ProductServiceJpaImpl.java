@@ -43,7 +43,7 @@ public class ProductServiceJpaImpl implements ProductService {
 
         this.productRepository.findById(productId).ifPresentOrElse(foundProduct -> {
             foundProduct.setProductName(productDTO.getProductName());
-            foundProduct.setProductColor(productDTO.getProductColor());
+            foundProduct.setProductStyle(productDTO.getProductStyle());
             foundProduct.setUpc(productDTO.getUpc());
             foundProduct.setPrice(productDTO.getPrice());
             foundProduct.setQuantityOnHand(productDTO.getQuantityOnHand());
@@ -73,8 +73,8 @@ public class ProductServiceJpaImpl implements ProductService {
                 foundProduct.setProductName(productDTO.getProductName());
             }
 
-            if (productDTO.getProductColor() != null) {
-                foundProduct.setProductColor(productDTO.getProductColor());
+            if (productDTO.getProductStyle() != null) {
+                foundProduct.setProductStyle(productDTO.getProductStyle());
             }
 
             if (productDTO.getPrice() != null) {
