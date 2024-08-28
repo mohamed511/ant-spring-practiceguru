@@ -1,9 +1,15 @@
 package com.ant.springpracticeguru.repository;
 
+import com.ant.springpracticeguru.domain.ProductDTO;
+import com.ant.springpracticeguru.domain.ProductStyle;
 import com.ant.springpracticeguru.entities.Product;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,8 +19,31 @@ class ProductRepositoryTest {
     ProductRepository productRepository;
 
     @Test
+    void testSaveProductNameTooLong(){
+        Product product = Product.builder()
+                .productName("123".repeat(20))
+                .productStyle(ProductStyle.GOSE)
+                .upc("12356222")
+                .price(new BigDecimal("11.99"))
+                .quantityOnHand(392)
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .build();
+        assertThrows(ConstraintViolationException.class,()->{
+            Product saved = productRepository.save(product);
+            productRepository.flush();
+        });
+    }
+
+    @Test
     void testSaveProduct(){
-        Product saved = productRepository.save(Product.builder().productName("test").build());
+        Product product = Product.builder()
+                .productName("123").productStyle(ProductStyle.GOSE).upc("12356222")
+                .price(new BigDecimal("11.99")).quantityOnHand(392)
+                .createdDate(LocalDateTime.now()).updateDate(LocalDateTime.now())
+                .build();
+        Product saved = productRepository.save(product);
+        productRepository.flush();
         assertNotNull(saved);
         assertNotNull(saved.getId());
     }

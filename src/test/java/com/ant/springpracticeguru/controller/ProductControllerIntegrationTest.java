@@ -5,22 +5,34 @@ import com.ant.springpracticeguru.domain.ProductStyle;
 import com.ant.springpracticeguru.entities.Product;
 import com.ant.springpracticeguru.mapper.ProductMapper;
 import com.ant.springpracticeguru.repository.ProductRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class ProductControllerIntegrationTest {
@@ -33,6 +45,37 @@ class ProductControllerIntegrationTest {
 
     @Autowired
     ProductMapper productMapper;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    void testPatchBadProductName() throws Exception {
+        Product product = productRepository.findAll().get(0);
+
+        Map<String, Object> productMap = new HashMap<>();
+        productMap.put("productName", "New Name".repeat(20));
+
+        MvcResult mvcResult =
+        mockMvc.perform(patch(ProductController.PRODUCT_PATH_ID, product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()",is(1)))
+                .andReturn();
+        System.out.println(mvcResult.getResponse().getContentAsString());
+    }
 
     @Test
     void testPatchNotFoundProduct() {

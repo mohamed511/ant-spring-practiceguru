@@ -172,6 +172,7 @@ class ProductControllerTest {
         productDTO.setProductName("");
         given(productService.updateById(any(), any())).willReturn(Optional.of(productDTO));
 
+        MvcResult mvcResult =
         mockMvc.perform(put(ProductController.PRODUCT_PATH_ID, productDTO.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -179,5 +180,6 @@ class ProductControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.length()",is(1)))
                 .andReturn();
+        System.out.println(mvcResult.getResponse().getContentAsString());
     }
 }

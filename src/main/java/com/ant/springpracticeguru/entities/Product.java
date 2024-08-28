@@ -4,6 +4,7 @@ import com.ant.springpracticeguru.domain.ProductStyle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -30,6 +31,8 @@ public class Product {
 
     @NotBlank
     @NotNull
+    @Size(max = 50)
+    @Column(length = 50)
     private String productName;
 
     @NotNull
@@ -37,6 +40,8 @@ public class Product {
 
     @NotBlank
     @NotNull
+    @Size(max = 200)
+    @Column(length = 200)
     private String upc;
 
     private Integer quantityOnHand;
