@@ -176,7 +176,7 @@ class ProductControllerIntegrationTest {
     @Test
     void testFindAllProduct() {
         List<ProductDTO> product = this.productController.productList();
-        assertThat(product).isNotNull().hasSize(3);
+        assertThat(product).isNotNull().hasSize(2413);
     }
 
     @Rollback
