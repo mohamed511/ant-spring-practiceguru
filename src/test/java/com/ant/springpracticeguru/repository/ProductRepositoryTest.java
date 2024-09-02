@@ -26,8 +26,6 @@ class ProductRepositoryTest {
                 .upc("12356222")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
         assertThrows(ConstraintViolationException.class,()->{
             Product saved = productRepository.save(product);
@@ -40,7 +38,6 @@ class ProductRepositoryTest {
         Product product = Product.builder()
                 .productName("123").productStyle(ProductStyle.GOSE).upc("12356222")
                 .price(new BigDecimal("11.99")).quantityOnHand(392)
-                .createdDate(LocalDateTime.now()).updateDate(LocalDateTime.now())
                 .build();
         Product saved = productRepository.save(product);
         productRepository.flush();

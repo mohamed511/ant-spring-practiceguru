@@ -27,8 +27,6 @@ public class ProductServiceImpl implements ProductService {
                 .upc("12356")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         ProductDTO Product2 = ProductDTO.builder()
@@ -39,8 +37,6 @@ public class ProductServiceImpl implements ProductService {
                 .upc("12356222")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         ProductDTO Product3 = ProductDTO.builder()
@@ -51,8 +47,6 @@ public class ProductServiceImpl implements ProductService {
                 .upc("12356")
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         products.put(Product1.getId(), Product1);
@@ -81,8 +75,7 @@ public class ProductServiceImpl implements ProductService {
                 .upc(productDTO.getUpc())
                 .quantityOnHand(productDTO.getQuantityOnHand())
                 .price(productDTO.getPrice())
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                
                 .build();
         this.products.put(saveProduct.getId(), saveProduct);
         return saveProduct;

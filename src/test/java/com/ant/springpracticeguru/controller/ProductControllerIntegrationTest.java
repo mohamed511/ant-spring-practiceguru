@@ -148,7 +148,6 @@ class ProductControllerIntegrationTest {
         ProductDTO productDto = ProductDTO.builder()
                 .productName("Crank").productStyle(ProductStyle.GOSE).upc("12356222")
                 .price(new BigDecimal("11.99")).quantityOnHand(392)
-                .createdDate(LocalDateTime.now()).updateDate(LocalDateTime.now())
                 .build();
         ResponseEntity<?> responseEntity = this.productController.handlePost(productDto);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);

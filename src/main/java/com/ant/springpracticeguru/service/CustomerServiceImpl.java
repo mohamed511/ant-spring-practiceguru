@@ -21,24 +21,18 @@ public class CustomerServiceImpl implements CustomerService {
                 .id(UUID.randomUUID())
                 .name("Customer 1")
                 .version(1)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name("Customer 2")
                 .version(1)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         CustomerDTO customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .name("Customer 3")
                 .version(1)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
 
         customers = new HashMap<>();
@@ -64,8 +58,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .id(UUID.randomUUID())
                 .name(customer.getName())
                 .version(customer.getVersion())
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
         this.customers.put(savedCustomer.getId(), savedCustomer);
         return savedCustomer;

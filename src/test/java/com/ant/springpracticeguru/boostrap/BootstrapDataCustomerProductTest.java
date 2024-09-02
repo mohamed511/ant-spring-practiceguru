@@ -2,6 +2,7 @@ package com.ant.springpracticeguru.boostrap;
 
 import com.ant.springpracticeguru.repository.CustomerRepository;
 import com.ant.springpracticeguru.repository.ProductRepository;
+import com.ant.springpracticeguru.service.ProductCsvService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,13 @@ class BootstrapDataCustomerProductTest {
     CustomerRepository customerRepository;
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    ProductCsvService productCsvService;
     BootstrapDataCustomerProduct bootstrapDataCustomerProduct;
 
     @BeforeEach
     void setUp() {
-        bootstrapDataCustomerProduct = new BootstrapDataCustomerProduct(customerRepository, productRepository);
+        bootstrapDataCustomerProduct = new BootstrapDataCustomerProduct(customerRepository, productRepository, productCsvService);
     }
 
     @Test

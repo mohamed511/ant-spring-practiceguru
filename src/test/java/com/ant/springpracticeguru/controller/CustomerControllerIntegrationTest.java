@@ -93,8 +93,6 @@ class CustomerControllerIntegrationTest {
                 .id(UUID.randomUUID())
                 .name("Customer 1")
                 .version(1)
-                .createdDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
                 .build();
         ResponseEntity<?> responseEntity = this.customerController.addCustomer(customerDto);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
